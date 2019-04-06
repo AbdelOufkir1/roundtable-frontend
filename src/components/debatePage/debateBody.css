@@ -1,0 +1,13 @@
+.textBox {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+
+}
+
+.submitButton {
+    /* color: black; */
+    /* position: relative; */
+    top:60px;
+}
