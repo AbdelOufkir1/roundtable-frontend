@@ -3,6 +3,9 @@
     background-color: #69779B;
     padding: 20px 10px;
     margin-bottom: 50px;
+    border-bottom: white solid 1px;
+    box-shadow: 0 4px 8px 0 rgba(156, 122, 122, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
   }
   
   /* Style the header links */

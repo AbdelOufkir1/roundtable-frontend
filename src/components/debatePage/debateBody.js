@@ -3,7 +3,6 @@ import './debateBody.css';
 import DebateBox from './debateBox';
 const _ = require('lodash');
 
-
 class DebateBody extends Component {
     constructor(props) {
         super(props) 
@@ -23,17 +22,7 @@ class DebateBody extends Component {
                     time: '',
                 }
             ],
-            discussionsPosts: {
-                posts : [
-                    {
-                    author: '',
-                    text : '',
-                    time: '',
-                    }
-                ]
-            }
-            
-            }
+        }
     }
 
     submitButtonOne = () => {
@@ -75,9 +64,7 @@ class DebateBody extends Component {
         arr.push(obj);    
         this.setState({
             currentPost: '',
-            debaterOne: arr,
-            debaterTwo: [...this.state.debaterTwo, '']
-            
+            debaterOne: arr,           
         })
 
         console.log('POSTS after add: ', this.state.debaterOne)
@@ -91,7 +78,6 @@ class DebateBody extends Component {
         this.setState({
             currentPost: '',    
             debaterTwo: arr,
-            debaterOne: [...this.state.debaterOne, '']
         })
         
         console.log('POSTS after add: ', this.state.debaterTwo)
@@ -101,8 +87,6 @@ class DebateBody extends Component {
 
     render () {
         
-        console.log(this.state.debaterOne)
-
         return (
             <>
 
@@ -117,6 +101,7 @@ class DebateBody extends Component {
                         console.log("eeee: ", e.time)
                 
                         return <DebateBox 
+                        side='One'
                         key={i}
                         text={e.text}
                         time={e.time}
@@ -141,6 +126,7 @@ class DebateBody extends Component {
                     console.log("eeee: ", e.time)
             
                     return <DebateBox 
+                    side='two'
                     key={i}
                     text={e.text}
                     time={e.time}
@@ -152,7 +138,7 @@ class DebateBody extends Component {
                              <label>Text</label>
                              <textarea> 
                                  
-                                {this.state.currentPost} 
+                                {/* {this.state.currentPost}  */}
                                 
                              </textarea>
                               
