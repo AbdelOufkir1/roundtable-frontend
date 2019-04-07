@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import './debate.css';
 import DebateHeader from '../components/debatePage/debateHeader';
 import DebateBody from '../components/debatePage/debateBody';
+import Discussions from '../components/debatePage/discussions';
 
 class Debate extends Component {
     constructor(props) {
     super(props)
     
         this.state = {
+            status : "InDebate",
             debate : {
                 subject : 'Global Warming',
                 title : 'Global warming is not a hoax. challenge me',
@@ -32,28 +34,52 @@ class Debate extends Component {
     
     }
 
+    handleClicked = (e) => {
+        
+        this.setState({
+            status: e.target.getAttribute('name')
+        })
+    }       
+
     render() {
         return (
             <>
 
             <div class="ui container">
                 <DebateHeader infos={this.state.debate} />
+                <div className="ui two top attached buttons">
+                    <div className="ui teal button" name="InDebate" onClick={this.handleClicked} >Debate</div>
+                    <div className="ui blue button" name="InDiscussions" onClick={this.handleClicked} >Discussion</div>
+                </div>
             </div>
 
+
             <div className="ui container debateWrapper">
-                    <div className="ui internally celled grid">
-                        <div class="row">
-                            <div class="eight wide column">
-                                <p> Debater One </p>
-                            </div>
-                            <div class="eight wide column">
-                                <p> Debater Two </p>
-                            </div>
-                        </div>
+                { this.state.status === 'InDebate' ?
 
-                    <DebateBody />
+                 <div className="ui internally celled grid">
+                 <div class="row">
+                     <div class="eight wide column">
+                         <p> Debater One </p>
+                     </div>
+                     <div class="eight wide column">
+                         <p> Debater Two </p>
+                     </div>
+                 </div>
 
-                    </div>
+                <DebateBody />
+
+                </div>  
+
+                :
+                
+                <Discussions />
+             }
+            
+            
+
+                
+                   
                 </div>
              
             </>

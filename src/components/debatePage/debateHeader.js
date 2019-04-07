@@ -9,10 +9,10 @@ const debateHeader = (props) => {
                 <div className="four wide column debateHeader">
                 
                     <img src={props.infos.debaters.first_debater.image} />
-                    <div class="ui buttons">
-                        <button class="ui button"> Supporters <br/> {props.infos.debaters.first_debater.num_supporters}</button>
-                        <div class="or" data-text=""></div>
-                        <button class="ui positive button"> Debaters<br/>{props.infos.debaters.first_debater.num_debaters}</button>
+                    <div className="ui buttons">
+                        <button className="ui button"> Supporters <br/> {props.infos.debaters.first_debater.num_supporters}</button>
+                        <div className="or" data-text=""></div>
+                        <button className="ui positive button"> Debaters<br/>{props.infos.debaters.first_debater.num_debaters}</button>
                     </div>
                 
                 </div>
@@ -21,16 +21,26 @@ const debateHeader = (props) => {
                         <h2 className="ui segment"> {props.infos.title}</h2>
                         <div className="ui segment"> {props.infos.description} </div>
                         <div className="ui segment"> {props.infos.rules} </div>
-
                      </div>   
+
+                        <div className="ui labeled button" tabindex="0">
+                            <div className="ui red button">
+                                <i className="heart icon"></i> Follow
+                            </div>
+                            <a className="ui basic red left pointing label">
+                                1,048
+                            
+                            </a>
+                        </div>
+
 
                 </div>
                 <div className="debateHeader four wide column ">
                     <img src={props.infos.debaters.second_debater.image} />
-                    <div class="ui buttons">
-                        <button class="ui button"> Supporters <br/> {props.infos.debaters.second_debater.num_supporters}</button>
-                        <div class="or" data-text=""></div>
-                        <button class="ui positive button"> Debaters <br/>{props.infos.debaters.second_debater.num_debaters}</button>
+                    <div className="ui buttons">
+                        <button className="ui button"> Supporters <br/> {props.infos.debaters.second_debater.num_supporters}</button>
+                        <div className="or" data-text=""></div>
+                        <button className="ui positive button"> Debaters <br/>{props.infos.debaters.second_debater.num_debaters}</button>
                     </div>
                 </div>
                 </div>
@@ -44,23 +54,3 @@ const debateHeader = (props) => {
 }
 
 export default debateHeader;
-
-
-// <div className="image">
-// <img src={props.infos.debaters.first_debater.image} />
-// </div>
-// <div className="content">
-// <a className="header">{props.infos.subject}</a>
-// <div className="meta">
-//     <span> {props.infos.description} </span>
-// </div>
-// <div className="description">
-//     <p> {props.infos.rules} </p>
-// </div>
-// <div className="extra">
-//     Additional Details
-// </div>
-// <div className="image">
-//     <img src={props.infos.debaters.second_debater.image} />
-// </div>
-// </div>
