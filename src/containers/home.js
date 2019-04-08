@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 // import AxiosCalls from '../axios';
-// import axios from 'axios';
+import axios from 'axios';
 import DebateList from '../components/debateList';
 import './home.css';
 import DiscussionsTable from '../components/discussionsTable';
 import Suggestions from '../components/usersSuggestions';
+import AuthContext from '../contexts/auth';
+import { throws } from 'assert';
+const _ = require('lodash');
+
 
 class Home extends Component {
 
@@ -19,15 +23,21 @@ class Home extends Component {
                 supporters: '',
                 debaters: '',
             },
-            discssions : [
+            discussions : [
                 {
-                  author: 'Abdul',  
+                  author: {
+                      name: 'Abdul',
+                      image :'myImage.png',
+                    },
                   debate: 'Life is such a rollercoster',
                   body: "I can't believe what's going on with me right now",
                   timeStamp: '03:39 pm April 20, 2019',  
                 },
                 {
-                  author: 'Oufkir',  
+                  author: {
+                      name: 'Oufkir',
+                      image: 'myImage.png'
+                    }, 
                   debate: 'Glolbal Warming is not backed by any science',
                   body: 'I have checked multiple sources and nothing says that what we call global warming is true',
                   timeStamp: '02:23 pm April 20, 2019',  
@@ -82,58 +92,76 @@ class Home extends Component {
         }
     }
 
-    // componentDidMount() {
+    componentDidMount() {
 
-    //     axios.get('http://localhost:3001/debate/all')
-    //             .then( response => {
-    //                 // console.log(response.data) 
-    //                 let debateListCpy = [...this.state.debatesList];
-    //                 const newDebate = response.data.map(e => {
-    //                     console.log('data is here: ', e)
-    //                     const debateObj = {
-    //                     subject: e.category,
-    //                     title: e.title,
-    //                     description: e.description, {    
-    //                     first_debater : {
-    //                          name: e.user1_name,
-    //                          image: e.user1_image,
-    //                         },
-    //                     second_debter: {
-    //                          name: e.user2_name,
-    //                          image: e.user2_image,
-    //                         },
-    //                         }
-    //                     }
-    //                     return debateObj;
-    //                 })
-    //                 debateListCpy = debateListCpy.concat(newDebate)
-    //                 console.log('new Debate: ', debateListCpy)
-    //                 this.setState({
-    //                     debatesList: debateListCpy,
-    //                 })
-    //                 return debateListCpy;
-    //             })
-    //             .then(data => {
-    //                 console.log('AFTER: ', data)
-    //             })
-    // }
+        axios.get('http://localhost:3001/debate/all')
+                .then( response => {
+                    // console.log(response.data) 
+                    // let debateListCpy = _.cloneDeep(this.state.debatesList);
+                    const newDebate = response.data.map((e,i) => {
+                        
+                        const debateObj = {
+                            subject: e.category,
+                            title: e.title,
+                            description: e.description,   
+                            first_debater : {
+                                name: e.user1_name,
+                                image: e.user1_image,
+                                },
+                            second_debater: {
+                                name: e.user2_name,
+                                image: e.user2_image,
+                                },
+                        }
+                    
+                        return debateObj;    
+                    })
+                    // debateListCpy = debateListCpy.concat(newDebate)
+                    console.log('NEW DEBATE ARRAY: ', newDebate)
+                    this.setState({
+                        debatesList: newDebate,
+                    })
+                })
+                .then(() => {
+                    axios.get('http://localhost:3001/debate/discussions/every')
+                        .then((response) => {
+                            console.log('data from posts: ', response)
+
+                            const newDiscussions = response.data.map((e,i) => {
+
+                                const discussionObj = {
+                                    author : {
+                                        name: e.user_name,
+                                        image: e.user_image, 
+                                        },
+                                    debate: e.title,
+                                    body: e.body,
+                                    timeStamp: e.created_at,
+                                }
+                            return discussionObj
+                            })
+                        this.setState({
+                            discussions: newDiscussions,
+                        })
+                    })
+                })
+    }
+
 
     render() {
-        console.log(this.state.debatesList)
         
         return (
-            
-            <>
-                <div className="ui centered grid">
-                    
-  
-                        <div class="eight wide column">
-  
 
-                        
+            <AuthContext.Consumer>
+            {
+              (user) => {
+                if (user) {
+                  return (
+                    <>
+                <div className="ui centered grid"> 
+                        <div class="eight wide column">
                             <div className="wrapper ui internally celled grid">
                                 {this.state.debatesList.map((e, i) => {
-
 
                                     return <DebateList
                                         key={i}
@@ -150,7 +178,6 @@ class Home extends Component {
                             < Suggestions />
                         </div>
                 </div>
-
                 <div className="tableWrapper ui container">
                     <table class="ui selectable striped table">
                         <thead>
@@ -162,28 +189,32 @@ class Home extends Component {
                             </tr>
                         </thead>
 
-                        {this.state.discssions.map((e, i) => {
+                        {this.state.discussions.map((e, i) => {
 
                             return <DiscussionsTable
                                 key={i}
-                                author={e.author}
+                                authorName={e.author.name}
+                                authorImage={e.author.image}
                                 debate={e.debate}
                                 body={e.body}
                                 timeStamp={e.timeStamp}
                             />
                         })
-
-
                         }
-
                     </table>
                 </div>
-
-
             </>
+                  )
+                } else {
+                  return <h2>You are not logged in.</h2>
+                }
+              }
+            }
+          </AuthContext.Consumer>
+    
+            
+            
         )
-
-
     }
 }
 

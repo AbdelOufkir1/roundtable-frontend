@@ -4,6 +4,7 @@ html, body {
 
 .myContainer {
     margin-top: -40%;
+    text-align: center;
 }
 
  .image-background {
@@ -12,5 +13,5 @@ html, body {
      filter: blur(8px);
      height: -webkit-fill-available;
      position: relative;
-
  }
+
