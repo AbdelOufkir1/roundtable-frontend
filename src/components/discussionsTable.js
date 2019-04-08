@@ -7,7 +7,8 @@ const DiscussionsTable = (props) => {
       
                 <tbody>
                     <tr>
-                        <td >{props.author}</td>
+                        <td >{props.authorName}</td>
+                        <td >{props.authorImage}</td>
                         <td>{props.debate}</td>
                         <td>{props.body}</td>
                         <td>{props.timeStamp}</td>

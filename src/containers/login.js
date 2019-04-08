@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './login.css';
 import firebase from '../firebase';
 import {  Redirect } from 'react-router-dom';
+import AuthContext from '../contexts/auth';
+import axios from 'axios';
 
 
 class Login extends Component {
@@ -19,14 +21,14 @@ class Login extends Component {
     }
 
     handleChange = (e) => {
-        console.log('target Name:', e.target.name)
+        // console.log('target Name:', e.target.name)
         this.setState({ [e.target.name]: e.target.value });
       }
     
 
     handleSignUp = e => {
         
-        let copyState = this.state.signupStatus
+        let copyState = this.state.signupStatus;
         copyState = !copyState;
         
         this.setState({
@@ -44,13 +46,28 @@ class Login extends Component {
             error:null,
         })
     
-        const { email, password } = this.state;
+        const { email, password, username } = this.state;
         firebase.auth().createUserWithEmailAndPassword(email, password)
           .then((response) => {
-              this.setState({
-                  firebaseUid: response.user.uid
+                axios.post('http://localhost:3001/user/', {
+                    name: username,
+                    email: email,
+                    firebase_uid : response.user.uid,
+                    image: 'gs://roundtable-5b0dc.appspot.com/man.png',
+                })
+                .then(res => {
+                    console.log("response from DB: ", res)
+                })
+                .catch(err => {
+                    console.log('error in axios call: ', err)
+                    this.setState({
+                        error: err,
+                    })
+                })
+                
+             this.setState({
+                  firebaseUid: response.user.uid,
               })
-            console.log('Returns: ', response);
           })
           .catch(err => {
             const { message } = err;
@@ -71,10 +88,20 @@ class Login extends Component {
         const { email, password } = this.state;
         firebase.auth().signInWithEmailAndPassword(email, password) 
           .then((response) => {
-            console.log('Returns: ', response);
-            if (response.user.uid){
 
-                console.log("uid is here: ", response.user.uid)
+            console.log('response: ', response.user.providerData[0].email)
+            if (response.user.uid){          
+
+                    axios.get(`http://localhost:3001/user/`, {
+                        params : {
+                            fbuid: response.user.uid,
+                            }
+                        })
+                    .then(res => {
+                        // this.props.history.push(`/user/${res.data.id}`)
+                        console.log('res in Sign In: ', res)
+                        })
+
                 this.setState({
                     firebaseUid: response.user.uid
                 })
@@ -190,24 +217,73 @@ class Login extends Component {
         )
     }
 
+    logGuestIn = (guest) => {
+        return (
+
+        <AuthContext.Consumer>
+            {
+            (context) => {
+                 context.loginInGuest(guest)
+                }
+            }
+        </AuthContext.Consumer>
+        )
+    }
+
     render() {
-        console.log('state: ', this.state)
+        // console.log('state: ', this.state)
+
+        const displayForm = <div className='page-container'>
+                 <div className="image-background"></div>
+                 <div className="myContainer">
+                     <div className="ui raised padded container segment">
+                         {   !this.state.signupStatus ? this.signInForm() : this.signupForm()    }            
+
+                        
+                        <button class="huge ui button GuestButton" onClick={this.logGuestIn}>
+                            Login as Guest
+                        </button>
+
+                     </div>
+                     
+
+                 </div>
+             </div>
     
         return (
             <>
-            <div className='page-container'>
-                <div className="image-background"></div>
-                <div className="myContainer">
-                    <div className="ui raised padded container segment">
-                        {   !this.state.signupStatus ? this.signInForm() : this.signupForm()    }            
 
-                        { this.state.firebaseUid ? <Redirect to="/home" /> : <></> }
-                    </div>
-                </div>
-            </div>
+            <AuthContext.Consumer>
+                {
+                (user) => {
+                    if (user) {
+                        return <Redirect to='/home' />
+                    } else {
+                        return displayForm                       
+                    }
+                }
+                }
+            </AuthContext.Consumer>
+
             </>
         )
     }
 }
 
 export default Login;
+
+
+// return (
+//     <>
+//     <div className='page-container'>
+//         <div className="image-background"></div>
+//         <div className="myContainer">
+//             <div className="ui raised padded container segment">
+//                 {   !this.state.signupStatus ? this.signInForm() : this.signupForm()    }            
+
+//                 { this.state.firebaseUid ? <Redirect to="/home" /> : <></> }
+//             </div>
+//         </div>
+//     </div>
+//     </>
+// )
