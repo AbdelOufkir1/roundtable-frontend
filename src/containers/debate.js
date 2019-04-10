@@ -3,6 +3,7 @@ import './debate.css';
 import DebateHeader from '../components/debatePage/debateHeader';
 import DebateBody from '../components/debatePage/debateBody';
 import Discussions from '../components/debatePage/discussions';
+import Axios from 'axios';
 
 class Debate extends Component {
     constructor(props) {
@@ -33,6 +34,50 @@ class Debate extends Component {
         }
     
     }
+
+
+    componentDidMount(){
+    
+        const path = (this.props.location.pathname).split('/')
+        const pathNum = parseInt(path[path.length - 1])
+        console.log(pathNum)
+
+        Axios.get(`http://localhost:3001/debate/${pathNum}`)
+            .then(res => {
+                console.log('response in debate: ', res)
+
+                const newDebate = {
+                    subject: res.data.subject,
+                        title: res.data.title,
+                        description: res.data.description,
+                        rules: res.data.rules,
+                        debaters :{
+                            first_debater: {
+                                name: res.data.debaterOne_name,
+                                image: res.data.debaterOne_image,
+                                num_supporters: res.data.debaterOne_supporters,
+                                num_debaters: res.data.debaterOne_debaters,
+                            },
+                            second_debater: {
+                                name: res.data.debaterTwo_name,
+                                image: res.data.debaterTwo_image,
+                                num_supporters: res.data.debaterTwo_supporters,
+                                num_debaters: res.data.debaterTwo_debaters,
+                            }
+                        }
+                }
+
+                this.setState({
+                   debate: newDebate,
+                })
+
+
+        }).catch(err => {
+            console.log('error in debatedid mount',err)
+        })
+
+    }
+
 
     handleClicked = (e) => {
         

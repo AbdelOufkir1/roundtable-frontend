@@ -6,7 +6,8 @@ import Header from './containers/header';
 import Debate from './containers/debate';
 import firebase from './firebase';
 import AuthContext from './contexts/auth';
-import logout from './containers/logout';
+import Logout from './containers/logout';
+import NewDebate from './containers/newDebate';
 
 class App extends Component {
 
@@ -14,20 +15,37 @@ class App extends Component {
     user : null
   }
 
-  loginGuest = (guest) => {
-    console.log('I MADE IT TO LOGIN GUEST')
-
+  updateState = (newState) =>{
     this.setState({
-      user: guest
+      user: newState,
+    })
+  }
+
+  loginGuest = (username) => {
+    console.log('I MADE IT TO LOGIN GUEST', username)
+    
+    this.setState({
+      user: username
     })
 
   }
 
+  logoutGuest = () => {
+    this.setState({
+      user: null
+    })
+  }
+
   componentDidMount() {
     this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-      // console.log("user is app: ", user)
+      
       if (user) {
-        this.setState({ user });
+        this.setState({ 
+          user: {
+            uid: user.uid,
+            email: user.email,
+            }
+         });
       }
       else {
         this.setState({ user: null })
@@ -41,16 +59,20 @@ class App extends Component {
 
 
   render() {
+
+    
     return (
       <HashRouter>
       <>
       <AuthContext.Provider value={this.state.user}>
-          <Route path='/' component={ Header } />    
+          <Route path='/' component={ Header } />
+          {/* <Route component={}></Route>     */}
             <Switch>
               <Route path='/home' exact component={Home} />
-              <Route path='/login' exact component={Login} />
-              <Route path='/debate' exact component={Debate} />
-              <Route path='/logout' exact component={logout} />
+              <Route path='/login' exact render={props => <Login {...props} loginGuest={this.loginGuest}/>} />
+              <Route path='/debate/:id' exact component={Debate} />
+              <Route path='/logout' exact render={props => <Logout {...props} logoutGuest={this.logoutGuest}/> } />
+              <Route path='/newdebate' exact component={NewDebate} />
               {/* <Route component={ Error404 } /> */}
             </Switch>
           </AuthContext.Provider>

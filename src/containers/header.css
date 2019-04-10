@@ -1,15 +1,19 @@
-.header {
+.searchMenu {
+  display: inline;
+  min-height:20px;
+}
+
+.myHeader {
     overflow: hidden;
     background-color: #69779B;
     padding: 20px 10px;
     margin-bottom: 50px;
     border-bottom: white solid 1px;
     box-shadow: 0 4px 8px 0 rgba(156, 122, 122, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-
   }
   
-  /* Style the header links */
-  .header a {
+  /* Style the myHeader links */
+  .myHeader a {
     float: left;
     color: black;
     text-align: center;
@@ -20,42 +24,39 @@
     border-radius: 4px;
   }
   
-  /* Style the logo link (notice that we set the same value of line-height and font-size to prevent the header to increase when the font gets bigger */
-  .header a.logo {
+  /* Style the logo link (notice that we set the same value of line-height and font-size to prevent the myHeader to increase when the font gets bigger */
+  .myHeader a.logo {
     font-size: 25px;
     font-weight: bold;
   }
   
   /* Change the background color on mouse-over */
-  .header a:hover {
+  .myHeader a:hover {
     background-color: #ddd;
     color: black;
   }
   
   /* Style the active/current link*/
-  .header a.active {
+  .myHeader a.active {
     background-color: dodgerblue;
     color: white;
   }
   
   /* Float the link section to the right */
-  .header-right {
+  .myHeader-right {
     float: right;
   }
   
   /* Add media queries for responsiveness - when the screen is 500px wide or less, stack the links on top of each other */ 
   @media screen and (max-width: 500px) {
-    .header a {
+    .myHeader a {
       float: none;
       display: block;
       text-align: left;
     }
-    .header-right {
+    .myHeader-right {
       float: none;
     }
   }
 
-  .searchBar {
-      position: absolute;
-      display: flex;
-  }
+  
