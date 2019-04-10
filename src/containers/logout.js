@@ -4,6 +4,7 @@ import firebase from '../firebase';
 export default class Logout extends React.Component {
 
   componentDidMount() {
+    this.props.logoutGuest()
     firebase.auth().signOut()
   }
 

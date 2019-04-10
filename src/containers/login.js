@@ -11,6 +11,7 @@ class Login extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            id : '',
             username: '',
             email: '',
             password: '',  
@@ -55,11 +56,24 @@ class Login extends Component {
                     firebase_uid : response.user.uid,
                     image: 'gs://roundtable-5b0dc.appspot.com/man.png',
                 })
-                .then(res => {
-                    console.log("response from DB: ", res)
+                    return response.user.uid
+                .then(uid => {
+                    
+                        axios.get('http://localhost:3001/user/', {
+                            params:{
+                                fbuid: uid
+                            }
+                        })
+                    .then(response => {
+                        console.log('user info from DB in sign up: ', response )
+                    }, err => {
+                        console.log('err in signup: ', err)
+                    })
+                    
+                    // console.log("response from DB: ", res)                    
                 })
                 .catch(err => {
-                    console.log('error in axios call: ', err)
+                    // console.log('error in axios call: ', err)
                     this.setState({
                         error: err,
                     })
@@ -68,7 +82,9 @@ class Login extends Component {
              this.setState({
                   firebaseUid: response.user.uid,
               })
+
           })
+          
           .catch(err => {
             const { message } = err;
             this.setState({ 
@@ -79,7 +95,7 @@ class Login extends Component {
     
     
     handleSignInSubmit = (e) => {
-        console.log('In SIgn In Submit')
+        // console.log('In SIgn In Submit')
         e.preventDefault();
         this.setState({
             error:null,
@@ -89,7 +105,7 @@ class Login extends Component {
         firebase.auth().signInWithEmailAndPassword(email, password) 
           .then((response) => {
 
-            console.log('response: ', response.user.providerData[0].email)
+            // console.log('response: ', response.user.providerData[0].email)
             if (response.user.uid){          
 
                     axios.get(`http://localhost:3001/user/`, {
@@ -99,12 +115,19 @@ class Login extends Component {
                         })
                     .then(res => {
                         // this.props.history.push(`/user/${res.data.id}`)
-                        console.log('res in Sign In: ', res)
+                        // console.log('res in Sign In: ', res)
+                        this.setState({
+                            id: res.data.id,
+                            firebaseUid: response.user.uid
+                            })
+                            // console.log("State in login: ", this.state)
                         })
 
-                this.setState({
-                    firebaseUid: response.user.uid
-                })
+                
+            }
+
+            else {
+                console.log('user ID DOES NOT EXIST')
             }
           })
           .catch(err => {
@@ -217,19 +240,6 @@ class Login extends Component {
         )
     }
 
-    logGuestIn = (guest) => {
-        return (
-
-        <AuthContext.Consumer>
-            {
-            (context) => {
-                 context.loginInGuest(guest)
-                }
-            }
-        </AuthContext.Consumer>
-        )
-    }
-
     render() {
         // console.log('state: ', this.state)
 
@@ -240,7 +250,7 @@ class Login extends Component {
                          {   !this.state.signupStatus ? this.signInForm() : this.signupForm()    }            
 
                         
-                        <button class="huge ui button GuestButton" onClick={this.logGuestIn}>
+                        <button class="huge ui button GuestButton" onClick={this.props.loginGuest}>
                             Login as Guest
                         </button>
 
@@ -250,6 +260,7 @@ class Login extends Component {
                  </div>
              </div>
     
+    
         return (
             <>
 
@@ -257,7 +268,8 @@ class Login extends Component {
                 {
                 (user) => {
                     if (user) {
-                        return <Redirect to='/home' />
+                        return <Redirect to="home" />
+                        // return <Redirect to={{  pathname: '/home', myState: this.state }} />
                     } else {
                         return displayForm                       
                     }
@@ -271,19 +283,3 @@ class Login extends Component {
 }
 
 export default Login;
-
-
-// return (
-//     <>
-//     <div className='page-container'>
-//         <div className="image-background"></div>
-//         <div className="myContainer">
-//             <div className="ui raised padded container segment">
-//                 {   !this.state.signupStatus ? this.signInForm() : this.signupForm()    }            
-
-//                 { this.state.firebaseUid ? <Redirect to="/home" /> : <></> }
-//             </div>
-//         </div>
-//     </div>
-//     </>
-// )

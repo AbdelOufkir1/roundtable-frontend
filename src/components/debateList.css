@@ -1,3 +1,7 @@
+.debateBanner{
+    border-radius: 50%;
+}
+
 .debatesTable {
     text-align: center;
 }
@@ -6,7 +10,19 @@
     text-align: center;
 }
 
-.debateCat {
-    background-color: #ACDBDF;
-    border: solid 1px black;
+.debatersBox {
+    background-color: aliceblue;
+    border-radius: 10%;
+    opacity: 0.8;
+    border: 1px solid black;
+    margin:20%;
 }
+
+.debateInfoBox{
+    font-size: 25px;
+    color: white;
+    border-radius: 10%;
+    text-shadow: 1px 1px 10px white;
+    line-height: 2;  
+    
+}   
