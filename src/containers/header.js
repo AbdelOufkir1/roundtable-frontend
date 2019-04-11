@@ -22,7 +22,7 @@ LoggedInForm = () => {
         <Link to="/home" className="logo"> <h1> Round Table </h1> </Link>
 
         <div className="myHeader-right ui labeled icon menu" >
-            <Link to="home" className="item">
+            <Link to="/home" className="item">
                 <i className="home icon"></i>
                 Home
                     </Link>
@@ -36,11 +36,11 @@ LoggedInForm = () => {
                     </a>
 
             {/* <Link to={{pathname: "/newdebate", state: {user: this.context} }}className="item"> */}
-            <Link to="newdebate" className="item">
+            <Link to="/newdebate" className="item">
                 <i className="comments icon"></i>
                 New Debate
                     </Link>
-            <Link to="logout" className="item">
+            <Link to="/logout" className="item">
                 <i className="logout icon"></i>
                 Logout
                     </Link>
@@ -52,23 +52,26 @@ LoggedInForm = () => {
 }
 
 
-    loggedOutForm = <> <div className="myHeader">
+    loggedOutForm = () => { 
+        return ( <> <div className="myHeader">
         <Link to="/home" className="logo"> <h1> Round Table </h1> </Link>
 
         <div className="myHeader-right ui labeled icon menu" >
-            <Link to="home" className="item">
+            <Link to="/home" className="item">
                 <i className="home icon"></i>
                 Home
         </Link>
             
-            <Link to="login" className="item">
+            <Link to="/login" className="item">
                 <i className="logout icon"></i>
                 Login
         </Link>
 
         </div>
     </div>
-    </>;
+    </>
+        )
+    }
 
 
 render ( ) {
@@ -79,12 +82,11 @@ render ( ) {
             {
                 (user) => {
 
-                    // console.log('user in header: ', user)
                     if (user) {
                         return <this.LoggedInForm />
-                        // return < this.LoggedInForm user={this.user} />
+                        
                     } else {
-                        return this.loggedOutForm
+                        return <this.loggedOutForm />
                     }
                 }
             }

@@ -54,7 +54,7 @@ class Login extends Component {
                     name: username,
                     email: email,
                     firebase_uid : response.user.uid,
-                    image: 'gs://roundtable-5b0dc.appspot.com/man.png',
+                    image: 'https://firebasestorage.googleapis.com/v0/b/roundtable-5b0dc.appspot.com/o/business.png',
                 })
                     return response.user.uid
                 .then(uid => {
