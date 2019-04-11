@@ -114,11 +114,12 @@ class Home extends Component {
 
         axios.get('http://localhost:3001/debate/all')
             .then(response => {
-                // console.log(response.data) 
+                console.log('debate loaded in home: ',response.data) 
                 // let debateListCpy = _.cloneDeep(this.state.debatesList);
                 const newDebate = response.data.map((e, i) => {
 
                     const debateObj = {
+                        id : e.id,
                         subject: e.category,
                         title: e.title,
                         category: e.category,
@@ -166,6 +167,9 @@ class Home extends Component {
             })
     }
 
+    handleBox = (e) => {
+        this.props.history.push(`/debate/${e}`)
+    }
 
     render() {
         console.log("state in home: ", this.state)
@@ -186,7 +190,9 @@ class Home extends Component {
                                                 {this.state.debatesList.map((e, i) => {
 
                                                     return <DebateList
+                                                        handleBox={this.handleBox}
                                                         key={i}
+                                                        id={e.id}
                                                         category={e.category}
                                                         title={e.title}
                                                         description={e.description}

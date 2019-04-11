@@ -3,10 +3,14 @@ import './debateList.css'
 import CategoryColors from './catergoryColors';
 
 const debateList = (props) => {
-    
+
+    const handleClick = () => {
+        props.handleBox(props.id);
+    }
+
     return (
         
-        <div className="debateBanner ui horizontal segments" style={{"background-color":CategoryColors[props.category]}}>
+        <div className="debateBanner ui horizontal segments"  onClick={handleClick} style={{"background-color":CategoryColors[props.category]}}>
             <div className="ui center aligned segment">
                 <h2 className="debatersBox">
                     <img src="https://www.shareicon.net/data/128x128/2017/07/13/888372_man_512x512.png" class="ui circular image"/>
