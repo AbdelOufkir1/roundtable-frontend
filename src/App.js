@@ -54,6 +54,7 @@ class App extends Component {
               uid: user.uid,
               email: user.email,
               id: response.data.id,
+              name: response.data.name,
               }
            });
         })

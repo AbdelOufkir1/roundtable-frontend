@@ -17,9 +17,11 @@ LoggedInForm = () => {
     
     // console.log('in logged in form: ', this.context)
     return ( 
-        
+            
         <> <div className="myHeader">
-        <Link to="/home" className="logo"> <h1> Round Table </h1> </Link>
+        <Link to="/home" className="logo"> <h1> Round Table </h1> welcome back {this.context.name} </Link>
+
+        
 
         <div className="myHeader-right ui labeled icon menu" >
             <Link to="/home" className="item">

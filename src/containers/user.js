@@ -3,6 +3,8 @@ import Axios from 'axios';
 import './user.css';
 import EditPage from '../components/userPage/editPage';
 import SupportingPage from '../components/userPage/supportingPage';
+import FollowingPage from '../components/userPage/followingPage';
+import ThreadsPage from '../components/userPage/threadsPage';
 import AuthContext from '../contexts/auth';
 
 class User extends Component {
@@ -39,8 +41,18 @@ class User extends Component {
                             image: 'https://www.shareicon.net/data/128x128/2015/10/05/651222_man_512x512.png',
                         },
     
-                    }
-                ]
+                    },
+                ],
+                supportingUser: [
+                    {
+                        id: '',
+                        name: '',
+                        image: '',
+                        bio: '',
+                        joined: '',
+                        supporters:'',
+                    },
+                ],
 
             }
     }
@@ -53,6 +65,10 @@ class User extends Component {
         Axios.get(`http://localhost:3001/user/${userId}`)
             .then(response => {
                 console.log('res from DB', response)
+                if (response.data.numsupporters === null) response.data.numsupporters = 0;
+                if (response.data.numdebaters === null) response.data.numdebaters = 0
+                const newJoined = response.data.created_at.split('T');
+
                 const newUser = {
                     id : response.data.id,
                     name: response.data.name,
@@ -62,7 +78,7 @@ class User extends Component {
                     debaters: response.data.numdebaters,
                     following: response.data.following,
                     firebaseUid:response.data.firebase_uid,
-                    joined: response.data.created_at,
+                    joined: newJoined[0],
                 }
                 this.setState({
                     user: newUser,
@@ -85,8 +101,54 @@ class User extends Component {
         this.setState({
             status: "supporting",
         })
+
+        const path = (this.props.location.pathname).split('/')
+        const userId = parseInt(path[path.length - 1])
+        this.renderSupporting(userId)
+        
+        
     }
 
+    showFollowing = () => {
+
+        this.setState({
+            status: 'following',
+        })
+    }
+
+    showThreads = () => {
+
+        this.setState({
+            status: "threads",
+        })
+    }
+
+    renderSupporting = (uid) => {
+
+        Axios.get(`http://localhost:3001/user/supporters/${uid}/list`)
+            .then(response => {
+                console.log("response", response)
+                const newSupportingArray = response.data.map((e,i) => {
+
+                    if(e.numsupporters === null) e.numsupporters = 0
+                    const newJoin = e.created_at.split('T')
+
+                    const newSupporting = {
+                        id: e.id,
+                        name: e.name,
+                        image: e.image,
+                        bio: e.bio,
+                        joined: newJoin[0],
+                        supporters: e.numsupporters,
+                    }
+                    return newSupporting
+                })
+                
+                this.setState({
+                    supportingUser:newSupportingArray
+                })
+            })
+    }
 
     profileHeader = () => {
         return (
@@ -103,7 +165,7 @@ class User extends Component {
                     <div class="six wide column">
                         
 
-                        <table class="ui definition large very padded fixed table">
+                        <table class="ui definition large very padded fixed table myTable">
                        
                         <tbody>
                             <tr>
@@ -124,9 +186,9 @@ class User extends Component {
                  </div>
                  <div class="ui  bottom attached buttons">
                     <div class="ui button" onClick={this.showProfile} >Edit Profile</div>
-                    <div class="ui button"  >following</div>
+                    <div class="ui button"  onClick={this.showFollowing}>following</div>
                     <div class="ui button" onClick={this.showSupporting} >Supporting</div>
-                    <div class="ui button">Threads</div>
+                    <div class="ui button" onClick={this.showThreads}>Threads</div>
                 </div>
 
                  </div>
@@ -138,8 +200,45 @@ class User extends Component {
         return (
             <>
                  {
-                    this.state.status === 'supporting' ?  <SupportingPage />  : <h1>nothing</h1>
-                            
+                     
+                    this.state.status === 'supporting' ?  
+                    <>
+                            <div class="ui container supportingHeader">
+                                <h2 class="ui center aligned icon header">
+                                    <i class="circular users icon"></i>
+                                    Supporting
+                        </h2>
+                            </div>
+                            <div className="ui container">
+                                        <div class="ui centered link cards">
+
+                                        { 
+                                            this.state.supportingUser.map((e,i) => {
+                                                return < SupportingPage 
+                                                    key={i}
+                                                    id={e.id}
+                                                    name={e.name}
+                                                    image={e.image}
+                                                    bio={e.bio}
+                                                    joined={e.joined}
+                                                    supporters={e.supporters}
+                                                />
+                                            })
+                                        }
+                                            
+                                        </div>
+                                    </div>
+                                
+                        
+                    </>
+                            : 
+                    this.state.status === 'following' ? 
+                            <FollowingPage />
+                                : 
+                    this.state.status === 'threads' ? 
+                            <ThreadsPage /> 
+                                    : 
+                            <EditPage />                             
                  }
             </>
         )

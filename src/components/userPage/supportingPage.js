@@ -1,40 +1,37 @@
 import React from 'react';
 
-const SupportingPage = (props) =>{
+const SupportingPage = (props) => {
     return (
         <>
-        <div class="ui container">
-                        <h2 class="ui center aligned icon header">
-                            <i class="circular users icon"></i>
-                            Supporting
-                        </h2>
+
+
+            <div class="card" >
+                <div class="image">
+                    <img src={props.image} style={{ "width": "100%", "height": "100%", "objectFit": "contain" }} />
+                </div>
+                <div class="content">
+                    <div class="header"> {props.name}</div>
+
+                    <div class="description">
+                        {props.bio}
                     </div>
-                    <div className="ui container">
-                    <div class="ui three column divided grid">
-                        <div class="row">
-                            <div class="column">
-                            <p> containert </p>
-                            </div>
-                            <div class="column">
-                            <p> content </p>
-                            </div>
-                            <div class="column">
-                            <p>content </p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="column">
-                            <p>content`</p>
-                            </div>
-                            <div class="column">
-                            <p>contetn</p>
-                            </div>
-                            <div class="column">
-                            <p>contetn</p>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
+                </div>
+                <div class="extra content">
+                    <span class="right floated">
+
+                        Joined:  {props.joined}
+                    </span>
+                    <span>
+                        <i class="user icon"></i>
+                        {props.supporters}
+                    </span>
+
+                </div>
+            </div>
+
+
+
+
         </>
     )
 }
