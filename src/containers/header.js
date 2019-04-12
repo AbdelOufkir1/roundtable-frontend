@@ -26,14 +26,14 @@ LoggedInForm = () => {
                 <i className="home icon"></i>
                 Home
                     </Link>
-            <a className="item">
+            <Link to={`/user/${this.context.id}`} className="item">
                 <i className="address book icon"></i>
                 Profile
-                    </a>
-            <a className="item">
+                    </Link>
+            <Link to="/search" className="item">
                 <i className="search icon"></i>
                 Search
-                    </a>
+                    </Link>
 
             {/* <Link to={{pathname: "/newdebate", state: {user: this.context} }}className="item"> */}
             <Link to="/newdebate" className="item">
@@ -72,6 +72,7 @@ LoggedInForm = () => {
     </>
         )
     }
+
 
 
 render ( ) {

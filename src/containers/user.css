@@ -1,0 +1,14 @@
+.myContainer {
+    /* display: flex; */
+    margin: auto;
+    border-style: groove;
+    border-radius: 5%; 
+    padding: 50px;
+    margin-right: 200px;
+    margin-left: 150px;
+}
+
+.headerWrapper {
+    border-bottom: solid grey 1px;
+    margin-bottom: 50px;
+}

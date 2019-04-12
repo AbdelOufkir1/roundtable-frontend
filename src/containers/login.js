@@ -54,9 +54,8 @@ class Login extends Component {
                     name: username,
                     email: email,
                     firebase_uid : response.user.uid,
-                    image: 'https://firebasestorage.googleapis.com/v0/b/roundtable-5b0dc.appspot.com/o/business.png',
+                    image: 'https://www.shareicon.net/data/128x128/2015/09/20/643858_class_512x512.png',
                 })
-                    return response.user.uid
                 .then(uid => {
                     
                         axios.get('http://localhost:3001/user/', {

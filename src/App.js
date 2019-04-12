@@ -8,6 +8,9 @@ import firebase from './firebase';
 import AuthContext from './contexts/auth';
 import Logout from './containers/logout';
 import NewDebate from './containers/newDebate';
+import User from './containers/user';
+import Search from './containers/search';
+import Axios from 'axios';
 
 class App extends Component {
 
@@ -40,12 +43,24 @@ class App extends Component {
     this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       
       if (user) {
-        this.setState({ 
-          user: {
-            uid: user.uid,
-            email: user.email,
-            }
-         });
+        Axios.get('http://localhost:3001/user/', {
+          params: {
+            fbuid: user.uid
+          }
+        }).then(response => {
+          
+          this.setState({ 
+            user: {
+              uid: user.uid,
+              email: user.email,
+              id: response.data.id,
+              }
+           });
+        })
+
+        
+
+         
       }
       else {
         this.setState({ user: null })
@@ -73,6 +88,8 @@ class App extends Component {
               <Route path='/debate/:id' exact component={Debate} />
               <Route path='/logout' exact render={props => <Logout {...props} logoutGuest={this.logoutGuest}/> } />
               <Route path='/newdebate' exact component={NewDebate} />
+              <Route path='/user/:id' exact component= {User} />
+              <Route path="/search" exact component={Search} />
               {/* <Route component={ Error404 } /> */}
             </Switch>
           </AuthContext.Provider>
