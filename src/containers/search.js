@@ -4,7 +4,11 @@ import Axios from 'axios';
 import SearchCard from '../components/searchPage/searchCard';
 
 class Search extends Component {
+
+    static contextType = AuthContext;
+
     constructor(props) {
+
         super(props)
 
         this.state = {
@@ -68,6 +72,17 @@ class Search extends Component {
         })
     }   
 
+    addToSupport = (id) => {
+
+        Axios.post(`http://localhost:3001/user/supporters/${this.context.id}/add`, {
+            supporterId: id,
+        })
+        .then(response => {
+            console.log(response)
+        })
+
+    }
+
 
     render() {
 
@@ -97,6 +112,7 @@ class Search extends Component {
                                                     joined={e.joined}
                                                     supporters={e.supporters}
                                                     handleClick={this.handleClickedCard}
+                                                    addToSupport={this.addToSupport}
                                                 />
                                             })
                                             }

@@ -6,9 +6,15 @@ import React from "react";
 const SearchCard = (props) => {
 
     const handleClick = (e) =>{
-        // console.log('e.target', e.target)
-        // if(e.target.getAttribute('name')) console.log('yeS')
-        props.handleClick(props.id)   
+        
+        if  (e.target.getAttribute('addtosupport')) {
+            props.addToSupport(props.id);
+        }
+
+        else { 
+            props.handleClick(props.id);
+        }
+        
     }
 
     return (
@@ -35,7 +41,7 @@ const SearchCard = (props) => {
       </span>
       
     </div>
-    <div class="ui bottom attached button" name="support">
+    <div class="ui bottom attached button" addtosupport="support">
       <i class="add icon"></i>
       Support
     </div>

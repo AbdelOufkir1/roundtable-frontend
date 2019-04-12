@@ -19,10 +19,12 @@ class Discussions extends Component {
         ]
     }
 
+
+
     render() {
         return (
             <>
-
+                
                 <table class="ui celled table">
                     <thead>
                         <tr>
