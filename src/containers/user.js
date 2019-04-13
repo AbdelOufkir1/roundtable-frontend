@@ -257,7 +257,7 @@ class User extends Component {
                     if (user) {
                         return (
                     <>    
-                        <div className="myContainer Top ">
+                        <div className="myContainers Top ">
 
                             <this.profileHeader />
        

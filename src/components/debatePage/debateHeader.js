@@ -4,7 +4,7 @@ import './debateHeader.css';
 const debateHeader = (props) => {
     return (
         <>
-            <div className="ui block header ">
+            <div className="ui block header">
                 <div className="ui grid">
                     <div className="four wide column debateHeader">
                         <div className="card">

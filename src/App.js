@@ -10,6 +10,7 @@ import Logout from './containers/logout';
 import NewDebate from './containers/newDebate';
 import User from './containers/user';
 import Search from './containers/search';
+import Footer from './containers/footer';
 import Axios from 'axios';
 
 class App extends Component {
@@ -82,6 +83,8 @@ class App extends Component {
       <>
       <AuthContext.Provider value={this.state.user}>
           <Route path='/' component={ Header } />
+          
+
           {/* <Route component={}></Route>     */}
             <Switch>
               <Route path='/home' exact component={Home} />
@@ -93,6 +96,7 @@ class App extends Component {
               <Route path="/search" exact component={Search} />
               {/* <Route component={ Error404 } /> */}
             </Switch>
+            <Route path='/' component={ Footer } />
           </AuthContext.Provider>
       </>
       </HashRouter>

@@ -77,33 +77,37 @@ class DebateBody extends Component {
 
     addtoPostsOne = (e) => {
 
-        // console.log("posts one", this.context)
-
-        if (this.context.uid === this.state.debaterOnefbuid) {
+        // if (this.context.uid === this.state.debaterOnefbuid) {
 
             Axios.post('http://localhost:3001/debate/posts/new', {
                 did: this.state.id,
                 uid: this.state.debaterOneId,
                 text: this.state.currentPostOne,
             }).then(timestamp => {
-                // console.log("timestamp is: ",timestamp)
-            })
 
+                Axios.get(`http://localhost:3001/debate/posts/${this.state.id}/${this.state.debaterOneId}/all`)
+                    .then(response => {
+                        console.log("data from db: ", response)
+                        const newDebaterOne = response.data.map(e => {
+                            const Obj = {
+                                text: e.text,
+                                time: e.created_at
+                            }
+                            console.log("OBJ :", Obj)
+                            return Obj
+                            
+                        })
 
-            const arr = _.cloneDeep(this.state.debaterOne);
-            const obj = { text: this.state.currentPost, time: Date.now() }
-            arr.push(obj);
-            this.setState({
-                currentPostOne: '',
-                debaterOne: arr,
-            })
-            
-            
-        }
+                        this.setState({
+                            debaterOne: newDebaterOne,
+                        })
+                    })
+                })
+        // }
 
-        else {
-            window.alert("You can't edit what you don't own")
-        }
+        // else {
+        //     window.alert("You can't edit what you don't own")
+        // }
 
     }
 
@@ -136,33 +140,38 @@ class DebateBody extends Component {
 
     componentDidMount() {
 
-        console.log("id: ", this.props.data.debaters.first_debater.id)
-        Axios.get(`http://localhost:3001/debate/posts/${this.props.data.id}/all`, {
-            params: {
-                uid: this.props.data.debaters.first_debater.id
-            }
-        }).then(res =>{
+        Axios.get(`http://localhost:3001/debate/posts/all/${this.props.data.id}`)
+            .then(res =>{                
+                    console.log('data: ',res)
+                    const newDebaterOne =[]
+                    const newDebaterTwo = []
+
+                res.data.forEach((e,i)=>{
+                    if (e.user_id === this.props.data.debaters.first_debater.id) {
+                        const newPostOne = {text: e.text, time: e.created_at}    
+                        newDebaterOne.push(newPostOne)
+                    }
+                    
+
+                    if (e.user_id === this.props.data.debaters.second_debater.id) {
+                        const newPostTwo = {text: e.text, time: e.created_at}
+                        newDebaterTwo.push(newPostTwo)
+                    }
+                })
                 
-                console.log('data: ',res)
-                // const newArray = res.data.map((e, i) =>{
-
-                // })
+                this.setState({
+                    debaterOne : newDebaterOne,
+                    debaterTwo: newDebaterTwo,
+                })
             })
-
-
-        setTimeout(() => {
-            this.setState({
-                id: this.props.data.id,
-                debaterOnefbuid: this.props.data.debaters.first_debater.firebase_uid,
-                debaterTwoIdfbuid: this.props.data.debaters.second_debater.firebase_uid,
-                debaterOneId: this.props.data.debaters.first_debater.id,
-                debaterTwoId: this.props.data.debaters.second_debater.id,
-            })
-    
-        },1000)
-
-        
-        
+ 
+        this.setState({
+            id: this.props.data.id,
+            debaterOnefbuid: this.props.data.debaters.first_debater.firebase_uid,
+            debaterTwoIdfbuid: this.props.data.debaters.second_debater.firebase_uid,
+            debaterOneId: this.props.data.debaters.first_debater.id,
+            debaterTwoId: this.props.data.debaters.second_debater.id,
+        })
     }
 
     render() {
@@ -184,7 +193,7 @@ class DebateBody extends Component {
                                                 {!this.state.debaterOne ? <></>
                                                     :
                                                     this.state.debaterOne.map((e, i) => {
-                                                        console.log("eeee: ", e.time)
+                                                        console.log("eeee: ", e.text)
 
                                                         return <DebateBox
                                                             side='One'
