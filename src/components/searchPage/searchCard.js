@@ -1,8 +1,5 @@
 import React from "react";
 
-
-
-
 const SearchCard = (props) => {
 
     const handleClick = (e) =>{
@@ -12,7 +9,7 @@ const SearchCard = (props) => {
         }
 
         else { 
-            props.handleClick(props.id);
+            props.handleClick(props.fbuid);
         }
         
     }

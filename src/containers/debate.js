@@ -48,6 +48,7 @@ class Debate extends Component {
 
         const path = (this.props.location.pathname).split('/')
         const pathNum = parseInt(path[path.length - 1])
+        
         // console.log(pathNum)
 
         Axios.get(`http://localhost:3001/debate/${pathNum}`)

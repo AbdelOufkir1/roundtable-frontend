@@ -1,8 +1,10 @@
 .debateWrapper {
     border: grey solid 1px;
     margin-top: 3%;
+
 }
 
 .debateBox {
     min-height: 400px;
+    
 }

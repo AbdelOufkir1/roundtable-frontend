@@ -147,11 +147,16 @@ class NewDebate extends Component {
                   if (user) {
 
                     return  <div className="ui container">
+                    <h2 className="ui center aligned icon header">
+                        <i className="circular settings icon"></i>
+                              Create New Debater
+                    </h2>
+
     
                     <div className="ui teal inverted segment ">
-                        <div className="ui inverted form">
+                        <div className="ui inverted big form">
     
-                            <select name="value" value={this.state.value} onChange={this.handleDropdown} className="ui dropdown six wide field">
+                            <select name="value" value={this.state.value} onChange={this.handleDropdown} className="ui wide dropdown field">
                                 <option value="">Category</option>
                                 <option value="1">Politics & Economics</option>
                                 <option value="2">Science & Technology</option>
@@ -165,7 +170,7 @@ class NewDebate extends Component {
                             </select>
     
                                 <br></br>
-                                <div className="six wide field">
+                                <div className="wide field">
                                     <label> Title </label>
                                     <input placeholder="title" type="text" name="title" onChange={this.handleChange} />
                                     <p> {this.state.title.length} /40 characters Max</p>
@@ -173,7 +178,7 @@ class NewDebate extends Component {
 
                                 <br></br>
 
-                                <div className="six wide field">
+                                <div className="wide field">
                                         <label> Description </label>
                                         <textarea rows="2" placeholder="Description" name="description" onChange={this.handleChange} ></textarea>
                                         <p> {this.state.description.length} /80 characters Max</p>
@@ -182,7 +187,7 @@ class NewDebate extends Component {
 
                                 <br></br>
 
-                                <div className="six wide field">
+                                <div className="wide field">
                                     <label> Rules </label>
                                     <textarea rows="2" placeholder="Rules" name="rules" onChange={this.handleChange} ></textarea>
                                     <p> {this.state.rules.length} /60 characters Max</p>
@@ -190,7 +195,7 @@ class NewDebate extends Component {
                                 </div>
                             
                         <br></br>
-                            <select name="debaterTwo" value={this.state.debaterTwo}  onChange={this.handleDropdown}className="ui dropdown six wide field">
+                            <select name="debaterTwo" value={this.state.debaterTwo}  onChange={this.handleDropdown}className="ui dropdown wide field">
                                 <option  >Debaters</option>
                                 { this.state.debaters.map((e,i) => {
                                     return <option key={i} value={e.id} id={e.name}> {e.name} </option>

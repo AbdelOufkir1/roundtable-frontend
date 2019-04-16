@@ -50,51 +50,56 @@ class Login extends Component {
         const { email, password, username } = this.state;
         firebase.auth().createUserWithEmailAndPassword(email, password)
           .then((response) => {
+            console.log('Returns from firebase: ', response.user.uid);
                 axios.post('http://localhost:3001/user/', {
                     name: username,
                     email: email,
-                    firebase_uid : response.user.uid,
-                    image: 'https://www.shareicon.net/data/128x128/2015/09/20/643858_class_512x512.png',
+                    firebase_uid: response.user.uid,
                 })
-                .then(uid => {
-                    
-                        axios.get('http://localhost:3001/user/', {
-                            params:{
-                                fbuid: uid
-                            }
-                        })
-                    .then(response => {
-                        console.log('user info from DB in sign up: ', response )
-                    }, err => {
-                        console.log('err in signup: ', err)
-                    })
-                    
-                    // console.log("response from DB: ", res)                    
+                .then(res => {  
+                    // axios.get('http://localhost:3001/user/')
+                    console.log('return from post Db:', res)
                 })
-                .catch(err => {
-                    // console.log('error in axios call: ', err)
-                    this.setState({
-                        error: err,
-                    })
+                .catch(error => {
+                    console.log('error from post: ', error)
                 })
-                
-             this.setState({
-                  firebaseUid: response.user.uid,
-              })
-
           })
-          
           .catch(err => {
             const { message } = err;
-            this.setState({ 
-                error: message,
-             });
+            this.setState({ error: message });
           })
+
+          
+        // const { email, password, username } = this.state;
+        // console.log("Name and email: ", username, email)
+        // firebase.auth().createUserWithEmailAndPassword(email, password)
+        //   .then((response) => {
+        //       console.log('respons from firebase: ', response)
+        //         return axios.post('http://localhost:3001/user/', {
+        //                 name: username,
+        //                 email: email,
+        //                 firebase_uid : response.user.uid,
+        //                 image: 'https://www.shareicon.net/data/128x128/2017/07/13/888372_man_512x512.png',
+        //                 })
+        //         })
+        //     .then(id =>{
+        //         console.log(' why id? ', id)
+                // axios.get('http://localhost:3001/user/', {
+                //     params:{
+                //         fbuid: id
+                //     }
+                // })
+            //   })
+        //   .catch(err => {
+        //     const { message } = err;
+        //     this.setState({ 
+        //         error: message,
+        //      });
+        //   })
       }
     
     
     handleSignInSubmit = (e) => {
-        // console.log('In SIgn In Submit')
         e.preventDefault();
         this.setState({
             error:null,
@@ -104,25 +109,20 @@ class Login extends Component {
         firebase.auth().signInWithEmailAndPassword(email, password) 
           .then((response) => {
 
-            // console.log('response: ', response.user.providerData[0].email)
-            if (response.user.uid){          
-
-                    axios.get(`http://localhost:3001/user/`, {
-                        params : {
-                            fbuid: response.user.uid,
-                            }
+            if (response.user.uid){         
+                axios.get(`http://localhost:3001/user/`, {
+                    params : {
+                        fbuid: response.user.uid,
+                        }
+                    })
+                .then(res => {
+                        console.log('response from signIn: ',res)                    
+                    this.setState({
+                        id: res.data.id,
+                        firebaseUid: response.user.uid
                         })
-                    .then(res => {
-                        // this.props.history.push(`/user/${res.data.id}`)
-                        // console.log('res in Sign In: ', res)
-                        this.setState({
-                            id: res.data.id,
-                            firebaseUid: response.user.uid
-                            })
-                            // console.log("State in login: ", this.state)
-                        })
-
-                
+                    })
+                .then(() => { return <Redirect to="/home" /> })
             }
 
             else {
@@ -135,7 +135,7 @@ class Login extends Component {
                 error: message 
             });
           })
-      }
+    }
 
 
     showEror = () => {
@@ -247,15 +247,7 @@ class Login extends Component {
                  <div className="myContainer">
                      <div className="ui raised padded container segment">
                          {   !this.state.signupStatus ? this.signInForm() : this.signupForm()    }            
-
-                        
-                        <button class="huge ui button GuestButton" onClick={this.props.loginGuest}>
-                            Login as Guest
-                        </button>
-
                      </div>
-                     
-
                  </div>
              </div>
     
