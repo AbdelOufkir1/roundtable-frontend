@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import './header.css';
 import AuthContext from '../contexts/auth';
+import Axios from 'axios';
 
 
 class Header extends Component {
 
     constructor(props) {
         super(props)
+        this.state = {
+            user: '',
+        }
     }
 
     static contextType = AuthContext;
@@ -35,11 +39,11 @@ class Header extends Component {
                         <i className="home icon"></i>
                         Home
                     </Link>
-                    <Link to={`/user/${this.context.id}`} className="item">
+                    <Link to={`/user/${this.context.uid}`} className="item">
                         <i className="address book icon"></i>
                         Profile
                     </Link>
-                    <Link to="/search" className="item">
+                    <Link fbuid={this.context.uid} to="/search" className="item">
                         <i className="search icon"></i>
                         Search
                     </Link>
@@ -87,8 +91,7 @@ class Header extends Component {
         )
     }
 
-
-
+    
     render() {
         return (
 

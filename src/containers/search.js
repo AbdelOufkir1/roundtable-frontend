@@ -18,6 +18,9 @@ class Search extends Component {
     }
 
     componentDidMount() {
+
+        console.log('props: ', this.props.match.params)
+
         Axios.get('http://localhost:3001/user/allusers')
             .then(response => { 
                 // console.log('response in search: ', response)
@@ -28,6 +31,7 @@ class Search extends Component {
                     const date = e.created_at.split('T')
 
                     const newUser = {
+                        fbuid: e.firebase_uid,
                         id: e.id,
                         name: e.name,
                         image: e.image,
@@ -72,14 +76,20 @@ class Search extends Component {
         })
     }   
 
-    addToSupport = (id) => {
+    addToSupport = async (id) => {
 
-        Axios.post(`http://localhost:3001/user/supporters/${this.context.id}/add`, {
-            supporterId: id,
-        })
-        .then(response => {
-            console.log(response)
-        })
+        try {
+            let getCall =   await Axios.get(`http://localhost:3001/user/`, {                              
+                             params : {
+                                    fbuid: this.context.uid,
+                                    }})
+            let postCall =  await Axios.post(`http://localhost:3001/user/supporters/${getCall.data.id}/add`, {
+                                        supporterId: id,
+                                    })   
+        }
+        catch (error) {
+            console.log('error in add to support: ', error)
+        }  
 
     }
 
@@ -105,6 +115,7 @@ class Search extends Component {
                                             {this.state.users.map((e, i) => {
                                                 return <SearchCard
                                                     key={i}
+                                                    fbuid={e.fbuid}
                                                     id={e.id}
                                                     name={e.name}
                                                     image={e.image}

@@ -48,31 +48,54 @@ class Login extends Component {
         })
     
         const { email, password, username } = this.state;
-        console.log("Name and email: ", username, email)
         firebase.auth().createUserWithEmailAndPassword(email, password)
           .then((response) => {
-              console.log('respons from firebase: ', response)
+            console.log('Returns from firebase: ', response.user.uid);
                 axios.post('http://localhost:3001/user/', {
                     name: username,
                     email: email,
-                    firebase_uid : response.user.uid,
-                    image: 'https://www.shareicon.net/data/128x128/2017/07/13/888372_man_512x512.png',
-                    })
-                }, err=> {console.log('error from post', err)})
-            .then(id =>{
-                console.log(' why id? ', id)
+                    firebase_uid: response.user.uid,
+                })
+                .then(res => {  
+                    // axios.get('http://localhost:3001/user/')
+                    console.log('return from post Db:', res)
+                })
+                .catch(error => {
+                    console.log('error from post: ', error)
+                })
+          })
+          .catch(err => {
+            const { message } = err;
+            this.setState({ error: message });
+          })
+
+          
+        // const { email, password, username } = this.state;
+        // console.log("Name and email: ", username, email)
+        // firebase.auth().createUserWithEmailAndPassword(email, password)
+        //   .then((response) => {
+        //       console.log('respons from firebase: ', response)
+        //         return axios.post('http://localhost:3001/user/', {
+        //                 name: username,
+        //                 email: email,
+        //                 firebase_uid : response.user.uid,
+        //                 image: 'https://www.shareicon.net/data/128x128/2017/07/13/888372_man_512x512.png',
+        //                 })
+        //         })
+        //     .then(id =>{
+        //         console.log(' why id? ', id)
                 // axios.get('http://localhost:3001/user/', {
                 //     params:{
                 //         fbuid: id
                 //     }
                 // })
-              })
-          .catch(err => {
-            const { message } = err;
-            this.setState({ 
-                error: message,
-             });
-          })
+            //   })
+        //   .catch(err => {
+        //     const { message } = err;
+        //     this.setState({ 
+        //         error: message,
+        //      });
+        //   })
       }
     
     

@@ -25,14 +25,14 @@ class App extends Component {
     })
   }
 
-  loginGuest = (username) => {
-    console.log('I MADE IT TO LOGIN GUEST', username)
+  // loginGuest = (uid,name ) => {
+  //   console.log('I MADE IT TO LOGIN GUEST', username)
     
-    this.setState({
-      user: username
-    })
+  //   this.setState({
+  //     user: username
+  //   })
 
-  }
+  // }
 
   logoutGuest = () => {
     this.setState({
@@ -42,33 +42,57 @@ class App extends Component {
 
   componentDidMount() {
     this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-      
       if (user) {
-        Axios.get('http://localhost:3001/user/', {
-          params: {
-            fbuid: user.uid
-          }
-        }).then(response => {
-          
-          this.setState({ 
-            user: {
-              uid: user.uid,
-              email: user.email,
-              id: response.data.id,
-              name: response.data.name,
-              }
-           });
-        })
-
-        
-
-         
+        this.setState({ user:{uid: user.uid, email:user.email} });
       }
       else {
         this.setState({ user: null })
       }
     })
   }
+
+// setID = (id, name) => {
+//   this.setState({
+//     user: {
+//       uid:user.uid,
+//       emai
+//     }
+//   })
+// }
+
+  // componentDidMount() {
+
+
+  
+      // this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+      
+      //   if (user) {
+      //     console.log('in cdid mount appjs',user)
+  
+      //     Axios.get('http://localhost:3001/user/', {
+      //       params: {
+      //         fbuid: user.uid
+      //       }
+      //     }).then(response => {
+      //         console.log('response from cdid mount in APP: ', response)
+      //       this.setState({ 
+      //         user: {
+      //           uid: user.uid,
+      //           email: user.email,
+      //           id: response.data.id,
+      //           name: response.data.name,
+      //           }
+      //        });
+      //     })
+           
+      //   }
+      //   else {
+      //     this.setState({ user: null })
+      //   }
+      // })
+  
+    
+  // }
 
   componentWillUnmount() {
     this.unsubscribe()

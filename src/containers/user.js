@@ -17,6 +17,7 @@ class User extends Component {
                 status: 'supporting',
                 user : {
                     id: '5',
+                    email: 'fikor@email.com',
                     name: 'Abidol Fikor',
                     image: 'https://www.shareicon.net/data/256x256/2016/05/24/770014_man_512x512.png',
                     bio: 'I Believe, I exist',
@@ -61,10 +62,15 @@ class User extends Component {
 
         const path = (this.props.location.pathname).split('/')
         const userId = parseInt(path[path.length - 1])
+        console.log('userID: ', path[path.length-1])
+        const fbuid = path[path.length-1]
 
-        Axios.get(`http://localhost:3001/user/${userId}`)
-            .then(response => {
-                console.log('res from DB', response)
+        Axios.get(`http://localhost:3001/user/`, {
+            params: {
+                fbuid:fbuid
+            }})
+        .then(response => {
+              console.log('res from user', response)
                 if (response.data.numsupporters === null) response.data.numsupporters = 0;
                 if (response.data.numdebaters === null) response.data.numdebaters = 0
                 const newJoined = response.data.created_at.split('T');
@@ -72,6 +78,7 @@ class User extends Component {
                 const newUser = {
                     id : response.data.id,
                     name: response.data.name,
+                    email: response.data.email,
                     image: response.data.image,
                     bio: response.data.bio,
                     supporters: response.data.numsupporters,
@@ -102,9 +109,11 @@ class User extends Component {
             status: "supporting",
         })
 
-        const path = (this.props.location.pathname).split('/')
-        const userId = parseInt(path[path.length - 1])
-        this.renderSupporting(userId)
+        // const path = (this.props.location.pathname).split('/')
+        // const fbuid = path[path.length-1]
+
+        console.log("ID: ", this.state.user.id)
+        this.renderSupporting(this.state.user.id)
         
         
     }
@@ -156,7 +165,7 @@ class User extends Component {
                 <div className="headerWrapper">
                 <div class="ui grid">
                     <div class="four wide column">
-                        <img src={this.state.user.image} alt=""     />
+                        <img src={this.state.user.image} alt="" style={{width:"256px", height:"256px"}}    />
                     </div>
                     <div class="six wide column">
                         <p> <h1> {this.state.user.name} </h1></p>
@@ -238,7 +247,7 @@ class User extends Component {
                     this.state.status === 'threads' ? 
                             <ThreadsPage /> 
                                     : 
-                            <EditPage />                             
+                            <EditPage user={this.state.user} />                             
                  }
             </>
         )
