@@ -7,7 +7,7 @@ import './footer.css';
 const Footer = (props) => {
     return (<>
         <div className="footer">
-            {/* <p> <a href='https://www.linkedin.com/in/abdeloufkir/' >Contact Us </a> </p> */}
+            <p> <a href='https://www.linkedin.com/in/abdeloufkir/' >Contact Us </a> </p>
         </div>
     </>
     )

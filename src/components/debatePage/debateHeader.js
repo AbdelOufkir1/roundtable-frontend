@@ -2,6 +2,41 @@ import React from 'react';
 import './debateHeader.css';
 
 const debateHeader = (props) => {
+
+    
+
+    let followStatus = false;
+
+    const showFollow = () => {
+        return ( <>
+          <div className="ui labeled button" tabIndex="0">
+                            <div className="ui red button" onClick={props.addFollow}>
+                                <i className="heart icon"></i> Follow
+                            </div>
+                            <a className="ui basic red left pointing label">
+                                {props.infos.numfollowers}
+
+                            </a>
+                        </div>
+        </>)
+    }
+
+    const showFollowed =() => {
+        return ( <>
+        <div className="ui labeled button" tabIndex="0">
+                            <div className="ui red button" onClick={props.addFollow}>
+                                <i className="heart icon"></i> Add to Follow
+                            </div>
+                            <a className="ui basic red left pointing label">
+                                {props.infos.numfollowers}
+
+                            </a>
+                        </div>
+                        </>
+        )
+    }
+
+
     return (
         <>
             <div className="ui block header">
@@ -9,7 +44,7 @@ const debateHeader = (props) => {
                     <div className="four wide column debateHeader">
                         <div className="card">
                             <div className="image">
-                                <img src={props.infos.debaters.first_debater.image} />
+                                <img src={props.infos.debaters.first_debater.image} style={{height:"256px", width:"256px"}} />
                             </div>
                             <div className="content">
                                 <div className="header"> {props.infos.debaters.first_debater.name} </div>
@@ -32,21 +67,14 @@ const debateHeader = (props) => {
                             <div className="ui segment"> <h4>{props.infos.rules}</h4> </div>
                         </div>
 
-                        <div className="ui labeled button" tabIndex="0">
-                            <div className="ui red button" onClick={props.addFollow}>
-                                <i className="heart icon"></i> Follow
-                            </div>
-                            <a className="ui basic red left pointing label">
-                                {props.infos.numfollowers}
-
-                            </a>
-                        </div>
+                      { followStatus ?  showFollowed() : showFollow() }
+                         
                     </div>
 
                     <div className="four wide column debateHeader">
                         <div className="card">
                         <div className="image">
-                                <img src={props.infos.debaters.second_debater.image} />
+                                <img src={props.infos.debaters.second_debater.image} style={{height:"256px", width:"256px"}}/>
                             </div>
                             <div className="content">
                                 <div className="header"> {props.infos.debaters.second_debater.name} </div>

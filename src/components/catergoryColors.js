@@ -1,12 +1,16 @@
 import React from 'react';
 
 const CategoryColors = {
-    1: 'blue',
-    2: 'green',
-    3: 'red',
-    4: 'black',
-    5: 'brown',
-    6: 'white',
+    1: "#f44141",
+    2: '#f48942',
+    3: '#f4ca41',
+    4: '#cdf441',
+    5: '#41f485',
+    6: '#41b8f4',
+    7: '#9441f4',
+    8: '#41f485',
+    9: '#41b8f8',
+    10: '#9441f9',
 
 }
 

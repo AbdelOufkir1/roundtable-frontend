@@ -55,6 +55,12 @@ class Debate extends Component {
             .then(res => {
                 console.log('response in debate: ', res)
 
+                if (res.data.debaterone_supporters === null) res.data.debaterone_supporters =0;
+                if (res.data.debatertwo_supporters === null) res.data.debatertwo_supporters =0;
+                if (res.data.debaterone_debaters === null) res.data.debaterone_debaters =0;
+                if (res.data.debatertwo_debaters === null) res.data.debatertwo_debaters =0;
+                if(res.data.numfollowers === null ) res.data.numfollowers = 0;
+
                 const newDebate = {
                     id: pathNum,
                     subject: res.data.subject,
@@ -91,6 +97,8 @@ class Debate extends Component {
                 console.log('error in debatedid mount', err)
             })
 
+            this.isFollow();
+
     }
 
 
@@ -107,13 +115,19 @@ class Debate extends Component {
         try {
             const response = await Axios.get('http://localhost:3001/user/', {params: {fbuid: this.context.uid}});
             const uid = response.data.id;
-            const res = await Axios.post('http://localhost:3001/debate/addfollower/',{ did:did, uid:uid });
+            const res = await Axios.post('http://localhost:3001/debate/addfollower/',{ did:did, uid:uid });            
             const follow = await Axios.get('http://localhost:3001/debate/getfollow');
+            
+            let numfollow = 0;
+            follow.data.forEach(e => {
+                if (e.debate_id === did) {
+                    numfollow = e.count
+                }
+            })
 
-           const followers = parseInt(follow.data[0].count);
             
             const newDebate = {...this.state.debate}
-            newDebate.numfollowers = followers;
+            newDebate.numfollowers = numfollow;
 
             this.setState({
                 debate: newDebate
@@ -124,12 +138,27 @@ class Debate extends Component {
         catch(err) {
             console.log('err in addfollow: ', err)
         }
-
     }
+
+    isFollow = async () => {
+
+        try {
+            const response = await Axios.get('http://localhost:3001/user/', {params: {fbuid: this.context.uid}});
+            const uid = response.data.id;
+            const did = parseInt(this.state.debate.id);
+            const follow = await Axios.get(`http://localhost:3001/debate/${did}/followers`);
+
+            follow.data.forEach(e => e.user_id === uid ? true : false)
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+    
 
     render() {
 
-        console.log('render of debate: ', this.state)
+        console.log('render of debate: ', this.isFollow)
 
         return (
 

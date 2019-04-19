@@ -4,7 +4,6 @@ import Axios from 'axios';
 import SearchCard from '../components/searchPage/searchCard';
 
 class Search extends Component {
-
     static contextType = AuthContext;
 
     constructor(props) {
@@ -12,8 +11,8 @@ class Search extends Component {
         super(props)
 
         this.state = {
-            search:'',
-            users: [],  
+            search: '',
+            users: [],
         }
     }
 
@@ -22,7 +21,7 @@ class Search extends Component {
         console.log('props: ', this.props.match.params)
 
         Axios.get('http://localhost:3001/user/allusers')
-            .then(response => { 
+            .then(response => {
                 // console.log('response in search: ', response)
 
                 const newUsers = response.data.map((e, i) => {
@@ -69,27 +68,28 @@ class Search extends Component {
 
     handleInput = (event) => {
 
-        const newArr = this.state.users.filter(e =>  e.name.toLowerCase().includes(event.target.value))
+        const newArr = this.state.users.filter(e => e.name.toLowerCase().includes(event.target.value))
 
         this.setState({
             users: newArr
         })
-    }   
+    }
 
     addToSupport = async (id) => {
 
         try {
-            let getCall =   await Axios.get(`http://localhost:3001/user/`, {                              
-                             params : {
-                                    fbuid: this.context.uid,
-                                    }})
-            let postCall =  await Axios.post(`http://localhost:3001/user/supporters/${getCall.data.id}/add`, {
-                                        supporterId: id,
-                                    })   
+            let getCall = await Axios.get(`http://localhost:3001/user/`, {
+                params: {
+                    fbuid: this.context.uid,
+                }
+            })
+            let postCall = await Axios.post(`http://localhost:3001/user/supporters/${getCall.data.id}/add`, {
+                supporterId: id,
+            })
         }
         catch (error) {
             console.log('error in add to support: ', error)
-        }  
+        }
 
     }
 

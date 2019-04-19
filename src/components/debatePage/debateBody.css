@@ -9,5 +9,6 @@
 .submitButton {
     /* color: black; */
     /* position: relative; */
-    top:60px;
+    /* top:60px;     */
+    margin-bottom: 20px;
 }
